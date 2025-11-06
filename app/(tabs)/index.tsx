@@ -1,16 +1,14 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { router } from 'expo-router';
 
 export default function HomeScreen() {
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: '#4CAF50', dark: '#2E7D32' }}
       headerImage={
         <Image
           source={require('@/assets/images/partial-react-logo.png')}
@@ -18,61 +16,69 @@ export default function HomeScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
+        <ThemedText type="title" style={styles.appTitle}>
+          Stridez
         </ThemedText>
+        <ThemedText style={styles.subtitle}>Your Personal Running Tracker</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
+      <ThemedView style={styles.featureContainer}>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>
+          Features
         </ThemedText>
+
+        <View style={styles.featureItem}>
+          <ThemedText style={styles.featureIcon}>📍</ThemedText>
+          <View style={styles.featureTextContainer}>
+            <ThemedText type="defaultSemiBold">Precise GPS Tracking</ThemedText>
+            <ThemedText style={styles.featureDescription}>
+              Track your runs with high-accuracy GPS positioning
+            </ThemedText>
+          </View>
+        </View>
+
+        <View style={styles.featureItem}>
+          <ThemedText style={styles.featureIcon}>⏱️</ThemedText>
+          <View style={styles.featureTextContainer}>
+            <ThemedText type="defaultSemiBold">Real-time Metrics</ThemedText>
+            <ThemedText style={styles.featureDescription}>
+              Monitor distance, pace, duration, and calories in real-time
+            </ThemedText>
+          </View>
+        </View>
+
+        <View style={styles.featureItem}>
+          <ThemedText style={styles.featureIcon}>💾</ThemedText>
+          <View style={styles.featureTextContainer}>
+            <ThemedText type="defaultSemiBold">Local Storage</ThemedText>
+            <ThemedText style={styles.featureDescription}>
+              All your running data stored securely on your device
+            </ThemedText>
+          </View>
+        </View>
+
+        <View style={styles.featureItem}>
+          <ThemedText style={styles.featureIcon}>📊</ThemedText>
+          <View style={styles.featureTextContainer}>
+            <ThemedText type="defaultSemiBold">Run History</ThemedText>
+            <ThemedText style={styles.featureDescription}>
+              View and analyze your previous runs and statistics
+            </ThemedText>
+          </View>
+        </View>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
+
+      <ThemedView style={styles.ctaContainer}>
+        <ThemedText type="subtitle" style={styles.sectionTitle}>
+          Get Started
         </ThemedText>
+        <ThemedText style={styles.instructions}>
+          Tap the Run tab below to start tracking your first run!
+        </ThemedText>
+
+        <TouchableOpacity style={styles.startButton} onPress={() => router.push('/(tabs)/run')}>
+          <ThemedText style={styles.startButtonText}>Start Running</ThemedText>
+        </TouchableOpacity>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -80,13 +86,61 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    marginBottom: 24,
   },
-  stepContainer: {
-    gap: 8,
+  appTitle: {
+    fontSize: 42,
     marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    opacity: 0.7,
+  },
+  featureContainer: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    marginBottom: 16,
+  },
+  featureItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 20,
+    paddingHorizontal: 8,
+  },
+  featureIcon: {
+    fontSize: 32,
+    marginRight: 16,
+  },
+  featureTextContainer: {
+    flex: 1,
+  },
+  featureDescription: {
+    fontSize: 14,
+    opacity: 0.7,
+    marginTop: 4,
+  },
+  ctaContainer: {
+    marginTop: 16,
+    alignItems: 'center',
+  },
+  instructions: {
+    textAlign: 'center',
+    marginBottom: 20,
+    opacity: 0.7,
+  },
+  startButton: {
+    backgroundColor: '#4CAF50',
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+    borderRadius: 12,
+    marginTop: 8,
+  },
+  startButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   reactLogo: {
     height: 178,

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
+import { RunMap } from '@/components/run-map';
 import { useLocationTracking } from '@/hooks/use-location-tracking';
 import {
   calculateTotalDistance,
@@ -201,6 +202,19 @@ export default function RunTrackerScreen() {
           </View>
         )}
 
+        {/* Map View */}
+        {(isTracking || coordinates.length > 0) && (
+          <View style={styles.mapContainer}>
+            <RunMap
+              coordinates={coordinates}
+              currentLocation={coordinates[coordinates.length - 1] || null}
+              showCurrentLocationMarker={isTracking}
+              followUser={isTracking && !isPaused}
+              style={styles.map}
+            />
+          </View>
+        )}
+
         {/* Main Metrics */}
         <View style={styles.metricsContainer}>
           <View style={styles.metricCard}>
@@ -328,6 +342,17 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#fff',
     textAlign: 'center',
+  },
+  mapContainer: {
+    height: 250,
+    marginBottom: 16,
+    borderRadius: 12,
+    overflow: 'hidden',
+    borderWidth: 2,
+    borderColor: '#e0e0e0',
+  },
+  map: {
+    flex: 1,
   },
   metricsContainer: {
     flexDirection: 'row',

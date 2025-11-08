@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
+import { RunMap } from '@/components/run-map';
 import { useFocusEffect } from '@react-navigation/native';
-import { getAllRuns, deleteRun, getRunStats, Run } from '@/database/db';
+import { getAllRuns, deleteRun, getRunStats, Run, Coordinate } from '@/database/db';
 import { formatPace, formatDuration, formatDistance } from '@/utils/runningMetrics';
 import { format, parseISO } from 'date-fns';
 
@@ -55,6 +56,7 @@ export default function HistoryScreen() {
 
   const renderRunItem = ({ item }: { item: Run }) => {
     const runDate = parseISO(item.createdAt);
+    const routeCoordinates: Coordinate[] = JSON.parse(item.route);
 
     return (
       <TouchableOpacity
@@ -69,6 +71,18 @@ export default function HistoryScreen() {
             <ThemedText style={styles.runTime}>{format(runDate, 'h:mm a')}</ThemedText>
           </View>
         </View>
+
+        {/* Route Map Preview */}
+        {routeCoordinates.length > 0 && (
+          <View style={styles.mapPreview}>
+            <RunMap
+              coordinates={routeCoordinates}
+              showCurrentLocationMarker={false}
+              followUser={false}
+              style={styles.map}
+            />
+          </View>
+        )}
 
         <View style={styles.runMetrics}>
           <View style={styles.runMetric}>
@@ -222,6 +236,15 @@ const styles = StyleSheet.create({
   runTime: {
     fontSize: 14,
     opacity: 0.6,
+  },
+  mapPreview: {
+    height: 150,
+    marginBottom: 12,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  map: {
+    flex: 1,
   },
   runMetrics: {
     flexDirection: 'row',

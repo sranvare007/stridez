@@ -15,6 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { getAllRuns, deleteRun, getRunStats, Run, Coordinate } from '@/database/db';
 import { formatPace, formatDuration, formatDistance } from '@/utils/runningMetrics';
 import { format, parseISO } from 'date-fns';
+import { router } from 'expo-router';
 
 export default function HistoryScreen() {
   const [runs, setRuns] = useState<Run[]>([]);
@@ -54,6 +55,22 @@ export default function HistoryScreen() {
     ]);
   };
 
+  const handleViewRunDetails = (run: Run) => {
+    router.push({
+      pathname: '/run-details',
+      params: {
+        id: run.id,
+        date: run.date,
+        duration: run.duration,
+        distance: run.distance,
+        averagePace: run.averagePace,
+        calories: run.calories || 0,
+        route: run.route,
+        createdAt: run.createdAt,
+      },
+    });
+  };
+
   const renderRunItem = ({ item }: { item: Run }) => {
     const runDate = parseISO(item.createdAt);
     const routeCoordinates: Coordinate[] = JSON.parse(item.route);
@@ -61,6 +78,7 @@ export default function HistoryScreen() {
     return (
       <TouchableOpacity
         style={styles.runCard}
+        onPress={() => handleViewRunDetails(item)}
         onLongPress={() => handleDeleteRun(item)}
         activeOpacity={0.7}>
         <View style={styles.runHeader}>
